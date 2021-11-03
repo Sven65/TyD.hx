@@ -7,51 +7,53 @@ enum NodeType {
 	LIST;
 }
 
-abstract class TyDNode {
-	@:isVar private var parent(get, set): TyDNode;
+abstract class TydNode {
+	@:isVar public var parent(get, set): TydNode;
 
 	/**
 	 * Can be null for anonymous nodes
 	 */
-	@:isVar private var name: String;
+	@:isVar public var name(get, null): String;
 
 	/**
 	 * Line in the doc where this node starts
 	 */
-	@:isVar public var docLine: Int = -1;
+	private var docLine: Int = -1;
+
+	public var lineNumber(get, null): Int;
 
 	/**
 	 * Index in the doc where this node ends
 	 */
 	@:isVar public var docIndexEnd: Int = -1;
 
-	public var fullTyD(get, null): String;
+	public var fullTyd(get, null): String;
 
-	public function get_parent() {
+	private function get_parent() {
 		return parent;
 	}
 
-	public function set_parent(node: TyDNode): TyDNode {
+	private function set_parent(node: TydNode): TydNode {
 		return this.parent = node;
 	}
 
-	public function get_name() {
+	private function get_name() {
 		return name;
 	}
 
-	public function set_name(name: String): String {
-		return this.name = name;
+	private function get_lineNumber() {
+		return docLine;
 	}
 
-	public function get_fullTyD(): String {
+	private function get_fullTyd(): String {
 		return "This is tyd";
 	}
 
-	public function new(name: String, parent: TyDNode, docLine: Int = -1) {
+	public function new(name: String, parent: TydNode, docLine: Int = -1) {
 		this.parent = parent;
 		this.name = name;
 		this.docLine = docLine;
 	}
 
-	public abstract function deepClone(): TyDNode;
+	public abstract function deepClone(): TydNode;
 }

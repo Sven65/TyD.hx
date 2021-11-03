@@ -1,16 +1,16 @@
 package tyd.nodes;
 
-class TyDString extends TyDNode {
-	private var val: String;
+class TydString extends TydNode {
+	public var value: String;
 
-	public function new(name: String, val: String, parent: TyDNode, docLine: Int = -1) {
+	public function new(name: String, value: String, parent: TydNode, docLine: Int = -1) {
 		super(name, parent, docLine);
 
-		this.val = val;
+		this.value = value;
 	}
 
 	public function deepClone() {
-		var c: TyDString = new TyDString(name, val, parent, docLine);
+		var c: TydString = new TydString(name, value, parent, docLine);
 		c.docIndexEnd = docIndexEnd;
 		return c;
 	}
