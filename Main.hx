@@ -3,6 +3,8 @@ package;
 import tyd.nodes.TydCollection;
 import tyd.nodes.TydString;
 
+using tyd.util.StringExtensions;
+
 // import tyd.nodes.TydTable;
 class Main {
 	public static function main() {
@@ -34,5 +36,7 @@ class Main {
 		trace("node name", node.fullTyd);
 
 		trace("Hello World");
+
+		trace("is white", " ".isWhitespace());
 	}
 }
