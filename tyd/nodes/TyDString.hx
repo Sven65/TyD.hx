@@ -14,4 +14,8 @@ class TydString extends TydNode {
 		c.docIndexEnd = docIndexEnd;
 		return c;
 	}
+
+	public function toString(): String {
+		return (name == null ? "NullName" : name) + "=\"" + value + "\"";
+	}
 }
