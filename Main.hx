@@ -5,6 +5,7 @@ import tyd.TydFromText;
 import tyd.nodes.TydCollection;
 import tyd.nodes.TydString;
 import tyd.nodes.TydTableImpl.TydTable;
+import tyd.nodes.TydTableImpl;
 
 using tyd.util.StringExtensions;
 
@@ -21,9 +22,9 @@ class Main {
 				trace("node", node.name);
 			}
 
-			// var table: TydTable = cast parsed[0];
+			var table: TydTable = cast(parsed[0], TydTableImpl);
 
-			// trace("name", table.get("name"));
+			trace("name", cast(table["name"], TydString).value);
 		}
 		catch (e:Exception) {
 			trace("error", e);

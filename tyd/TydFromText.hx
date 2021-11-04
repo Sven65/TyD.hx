@@ -321,7 +321,6 @@ class TydFromText {
 	}
 
 	private static function readSymbol(text: String, symType: SymbolType, p: RefInt): String {
-		trace("reading text", text);
 		var pStart: Int = p;
 		while (true) {
 			var c = text.charAt(p);
@@ -335,9 +334,6 @@ class TydFromText {
 		if (p == pStart) {
 			throw new Exception("Expected " + symbolTypeName(symType) + " at " + lineColumnString(text, p) + "\n" + errorSectionString(text, p));
 		}
-
-		trace("p neg", p - pStart);
-
 		return text.substr(pStart, p - pStart);
 	}
 
