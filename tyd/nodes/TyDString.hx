@@ -16,6 +16,7 @@ class TydString extends TydNode {
 	}
 
 	public function toString(): String {
-		return (name == null ? "NullName" : name) + "=\"" + value + "\"";
+		// return (name == null ? "NullName" : name) + "=\"" + value + "\"";
+		return "tydString";
 	}
 }

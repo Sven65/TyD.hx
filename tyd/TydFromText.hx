@@ -207,7 +207,7 @@ class TydFromText {
 			while (p < text.length && !(text.charAt(p) == '"' && text.charAt(p - 1) != '\\'))
 				p++;
 			// Set the return value to the contents of the string
-			val = text.substring(pStart, p - pStart);
+			val = text.substr(pStart, p - pStart);
 			val = resolveEscapeChars(val);
 			// Move past the end quote so we're pointing just after it
 			p++;
@@ -226,7 +226,7 @@ class TydFromText {
 				}
 				// p is now pointing at the first EOL char, or just after document end
 				// Add the content of this line to the string
-				sbVal += (text.substring(lineContentStart, p - lineContentStart));
+				sbVal += (text.substr(lineContentStart, p - lineContentStart));
 				// Skip past EOL and whitespace
 				p = nextSubstanceIndex(text, p);
 				// If the first substance we hit is a vbar, our string continues.
@@ -262,7 +262,7 @@ class TydFromText {
 			while (text.charAt(q).isWhitespace())
 				q--;
 
-			val = text.substring(pStart, q - pStart + 1);
+			val = text.substr(pStart, q - pStart + 1);
 
 			if (val == "null") // Special case for 'null' naked string.
 				val = null;
@@ -288,7 +288,7 @@ class TydFromText {
 					throw new Exception("Tyd string value ends with single backslash: " + input);
 
 				var resolvedChar: String = escapedCharOf(input.charAt(k + 1));
-				input = input.substring(0, k) + resolvedChar + input.substring(k + 2);
+				input = input.substr(0, k) + resolvedChar + input.substr(k + 2);
 			}
 		}
 		return input;
@@ -321,6 +321,7 @@ class TydFromText {
 	}
 
 	private static function readSymbol(text: String, symType: SymbolType, p: RefInt): String {
+		trace("reading text", text);
 		var pStart: Int = p;
 		while (true) {
 			var c = text.charAt(p);
@@ -334,7 +335,10 @@ class TydFromText {
 		if (p == pStart) {
 			throw new Exception("Expected " + symbolTypeName(symType) + " at " + lineColumnString(text, p) + "\n" + errorSectionString(text, p));
 		}
-		return text.substring(pStart, p - pStart);
+
+		trace("p neg", p - pStart);
+
+		return text.substr(pStart, p - pStart);
 	}
 
 	private static function symbolTypeName(st: SymbolType): String {
@@ -392,7 +396,7 @@ class TydFromText {
 			var start: Int = Std.int(Math.max(index - CharRangeWidth, 0));
 
 			var length: Int = Std.int(Math.min(CharRangeWidth * 2, text.length - index));
-			text = text.substring(start, length);
+			text = text.substr(start, length);
 		}
 		return modText;
 	}
