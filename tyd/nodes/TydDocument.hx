@@ -12,4 +12,8 @@ class TydDocument extends TydCollectionImpl {
 			this._nodes = Lambda.array(nodes);
 		}
 	}
+
+	public function toString(): String {
+		return name + "(TydDocument, " + count + ")";
+	}
 }

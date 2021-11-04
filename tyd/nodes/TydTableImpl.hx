@@ -21,4 +21,8 @@ class TydTableImpl extends TydCollectionImpl {
 		this.copyDataFrom(c);
 		return c;
 	}
+
+	public function toString(): String {
+		return name + "(TydTable, " + count + ")";
+	}
 }

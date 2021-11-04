@@ -6,6 +6,8 @@ import tyd.nodes.TydList;
 import tyd.nodes.TydNode;
 import tyd.nodes.TydString;
 import tyd.nodes.TydTableImpl;
+import tyd.util.RefInt;
+import tyd.util.Types.LineColumnStruct;
 
 using tyd.util.StringExtensions;
 
@@ -29,10 +31,10 @@ class TydFromText {
 	private static function Parse(text: String, startIndex: Int, parent: TydNode, expectNames: Bool = true): Array<TydNode> {
 		var parsedNodes: Array<TydNode> = new Array<TydNode>();
 
-		var p: Int = startIndex;
+		var p: RefInt = startIndex;
 
 		// Main loop
-		while (true) {
+		while (p != text.length) {
 			var recordName: String = null;
 			var recordAttHandle: String = null;
 			var recordAttSource: String = null;
@@ -58,9 +60,7 @@ class TydFromText {
 
 				// Read the record name if we're not reading anonymous records
 				if (expectNames) {
-					trace("p start", p);
 					recordName = readSymbol(text, SymbolType.RecordName, p);
-					trace("p end", p);
 				}
 
 				// Skip whitespace
@@ -110,8 +110,6 @@ class TydFromText {
 			// Read the record value.
 			// After this is complete, p should be pointing at the char after the last char of the record.
 			if (text.charAt(p) == Constants.TableStartChar) {
-				trace("we've got a table");
-
 				// It's a table
 
 				var newTable: TydTable = new TydTableImpl(recordName, parent, indexToLine(text, p));
@@ -130,8 +128,10 @@ class TydFromText {
 				p = nextSubstanceIndex(text, p);
 
 				// Confirm that we are indeed on the closing bracket
-				if (text.charAt(p) != Constants.TableEndChar)
+				if (text.charAt(p) != Constants.TableEndChar) {
 					throw new Exception("Expected '" + Constants.TableEndChar + "' at " + lineColumnString(text, p) + "\n" + errorSectionString(text, p));
+					break;
+				}
 
 				newTable.docIndexEnd = p;
 				newTable.setupAttributes(recordAttHandle, recordAttSource, recordAttAbstract, recordAttNoInherit);
@@ -140,11 +140,9 @@ class TydFromText {
 
 				// Move pointer one past the closing bracket
 				p++;
-				return parsedNodes;
 			}
 			else if (text.charAt(p) == Constants.ListStartChar) {
 				// It's a list
-				trace("we've got a list");
 				var newList: TydList = new TydList(recordName, parent, indexToLine(text, p));
 
 				// Skip past the opening bracket
@@ -169,11 +167,8 @@ class TydFromText {
 
 				// Move pointer one past the closing bracket
 				p++;
-
-				return parsedNodes;
 			}
 			else {
-				trace("we've got a string");
 				// It's a string
 				var pStart: Int = p;
 				var val: String;
@@ -183,18 +178,16 @@ class TydFromText {
 				strNode.docIndexEnd = p - 1;
 
 				parsedNodes.push(strNode);
-
-				return parsedNodes;
 			}
 		}
 
-		return null;
+		return parsedNodes;
 	}
 
 	// We are at the first char of a string value of unknown type.
 	// This returns the string value, and places p at the first char after it.
 
-	private static function parseStringValue(text: String, p: Int): String {
+	private static function parseStringValue(text: String, p: RefInt): String {
 		var val: String;
 		var format: StringFormat;
 		switch (text.charAt(p)) {
@@ -249,6 +242,7 @@ class TydFromText {
 		}
 		else if (format == StringFormat.Naked) {
 			var pStart: Int = p;
+
 			// Walk forward until we're on the first string content-terminating char or char group
 			// We need to ignore any that are escaped
 			while (p < text.length
@@ -264,10 +258,12 @@ class TydFromText {
 			// So we make pointer q, and walk it backwards until it's on non-whitespace.
 			// This lets us find the last non-whitespace char of the string value.
 			var q: Int = p - 1;
+
 			while (text.charAt(q).isWhitespace())
 				q--;
 
 			val = text.substring(pStart, q - pStart + 1);
+
 			if (val == "null") // Special case for 'null' naked string.
 				val = null;
 			else
@@ -324,7 +320,7 @@ class TydFromText {
 		}
 	}
 
-	private static function readSymbol(text: String, symType: SymbolType, p: Int): String {
+	private static function readSymbol(text: String, symType: SymbolType, p: RefInt): String {
 		var pStart: Int = p;
 		while (true) {
 			var c = text.charAt(p);
@@ -378,7 +374,11 @@ class TydFromText {
 
 	private static function lineColumnString(text: String, index: Int): String {
 		var line = -1, col: Int = -1;
-		indexToLineColumn(text, index, line, col);
+		var lineColumn = indexToLineColumn(text, index);
+
+		line = lineColumn.line;
+		col = lineColumn.column;
+
 		return "line " + line + ", col " + col;
 	}
 
@@ -399,16 +399,22 @@ class TydFromText {
 
 	private static function indexToLine(text: String, index: Int): Int {
 		var line: Int = -1;
-		var unused: Int = -1;
-		indexToLineColumn(text, index, line, unused);
+		var lineColumn = indexToLineColumn(text, index);
+
+		line = lineColumn.line;
+
 		return line;
 	}
 
-	private static function indexToLineColumn(text: String, index: Int, line: Int, column: Int): Void {
+	private static function indexToLineColumn(text: String, index: Int): LineColumnStruct {
 		// Note that these start at 1, not 0, because normal people are supposed to be able to use these
-		line = 1;
-		column = 1;
-		for (p in 0...index) {
+		var line: Int = 1;
+		var column: Int = 1;
+
+		var p = 0;
+
+		while (p < index) {
+			p++;
 			if (isNewlineLF(text, p)) {
 				line++;
 				column = 0;
@@ -416,9 +422,14 @@ class TydFromText {
 			else if (isNewlineCRLF(text, p)) {
 				line++;
 				column = 0;
-				// p++; // Skip forward an extra
+				p++; // Skip forward an extra
 			}
 			column++;
+		}
+
+		return {
+			line: line,
+			column: column,
 		}
 	}
 
@@ -429,7 +440,7 @@ class TydFromText {
 	 * @param p 
 	 * @return Int
 	 */
-	private static function nextSubstanceIndex(text: String, p: Int): Int {
+	private static function nextSubstanceIndex(text: String, p: RefInt): Int {
 		// Skip forward as long as p keeps hitting insubstantial chars or char groups
 
 		// Skip forward as long as p keeps hitting insubstantial chars or char groups

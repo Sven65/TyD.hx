@@ -71,38 +71,3 @@ Spell
         }
     ]
 }
-
-
-# Some enemies for our wizard to fight
-
-EnemyType *handle GoblinBase *abstract
-{
-    height          1.5
-    speed           0.5
-    health          60
-    defaultFaction  Evil
-}
-
-EnemyType *source GoblinBase
-{
-    name    GoblinWarlock
-    label   goblin warlock
-    spells
-    [
-        MagicMissile    # TyD reads this as a string. 
-                        # While reading the TyD data into actual game data,
-                        # game code needs to link this to the MagicMissle spell
-                        # defined earlier
-    ]
-}
-
-EnemyType *source GoblinBase
-{
-    name    GoblinFiremaster
-    label   goblin firemaster
-    health  120         # Override health defined in GoblinBase
-    spells
-    [
-        Fireball
-    ]
-}

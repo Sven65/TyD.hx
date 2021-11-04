@@ -14,4 +14,8 @@ class TydList extends TydCollectionImpl {
 
 		return c;
 	}
+
+	public function toString(): String {
+		return name + "(TydList, " + count + ")";
+	}
 }
