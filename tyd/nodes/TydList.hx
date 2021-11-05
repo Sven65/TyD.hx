@@ -2,13 +2,21 @@ package tyd.nodes;
 
 import tyd.nodes.TydCollection.TydCollectionImpl;
 
-class TydList extends TydCollectionImpl {
+@:forward
+@:access(TydListImpl)
+abstract TydList(TydListImpl) from TydListImpl {
+	@:arrayAccess public inline function get(index: Int) {
+		return this.nodes[index];
+	}
+}
+
+class TydListImpl extends TydCollectionImpl {
 	public function new(name: String, parent: TydNode, docLine: Int = -1) {
 		super(name, parent, docLine);
 	}
 
 	override public function deepClone(): TydNode {
-		var c: TydList = new TydList(name, parent, docLine);
+		var c: TydListImpl = new TydListImpl(name, parent, docLine);
 
 		copyDataFrom(c);
 

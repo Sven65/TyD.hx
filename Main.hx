@@ -3,6 +3,7 @@ package;
 import haxe.Exception;
 import tyd.TydFromText;
 import tyd.nodes.TydCollection;
+import tyd.nodes.TydList;
 import tyd.nodes.TydString;
 import tyd.nodes.TydTableImpl.TydTable;
 import tyd.nodes.TydTableImpl;
@@ -19,12 +20,14 @@ class Main {
 			trace("count", parsed.length);
 
 			for (node in parsed) {
-				trace("node", node.name);
+				trace(node.fullTyd);
 			}
 
-			var table: TydTable = cast(parsed[0], TydTableImpl);
+			// trace(parsed[1].fullTyd);
 
-			trace("name", cast(table["name"], TydString).value);
+			// var table: TydTable = cast(parsed[0], TydTableImpl);
+
+			// trace("name", cast(table["name"], TydString).value);
 		}
 		catch (e:Exception) {
 			trace("error", e);

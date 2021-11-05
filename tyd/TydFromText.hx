@@ -143,7 +143,7 @@ class TydFromText {
 			}
 			else if (text.charAt(p) == Constants.ListStartChar) {
 				// It's a list
-				var newList: TydList = new TydList(recordName, parent, indexToLine(text, p));
+				var newList: TydListImpl = new TydListImpl(recordName, parent, indexToLine(text, p));
 
 				// Skip past the opening bracket
 				p++;

@@ -6,6 +6,8 @@
 
 # Some spells, for use by our wizard and enemies
 
+name Fireball
+
 Spell
 {
     name        Fireball

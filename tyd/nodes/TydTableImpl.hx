@@ -8,6 +8,10 @@ abstract TydTable(TydTableImpl) from TydTableImpl {
 	@:arrayAccess public inline function get(index: String) {
 		return Lambda.find(this.nodes, item -> item.name == index);
 	}
+
+	@:arrayAccess public inline function getInt(index: Int) {
+		return this.nodes[index];
+	}
 }
 
 class TydTableImpl extends TydCollectionImpl {

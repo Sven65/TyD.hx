@@ -24,7 +24,7 @@ class StringExtensions {
 	static function get_lineEnd(): String {
 		#if target.sys
 		return switch (Sys.systemName()) {
-			case "Mac": "\r";
+			case "Mac": "\r\n";
 			case "Linux": "\n";
 			case _: "\r\n";
 		}

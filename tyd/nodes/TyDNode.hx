@@ -46,7 +46,7 @@ abstract class TydNode {
 	}
 
 	private function get_fullTyd(): String {
-		return "This is tyd";
+		return TydToText.write(this);
 	}
 
 	public function new(name: String, parent: TydNode, docLine: Int = -1) {
