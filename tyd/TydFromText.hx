@@ -24,6 +24,11 @@ enum StringFormat {
 }
 
 class TydFromText {
+	/**
+	 * Parses TyD into nodes.
+	 * @param text The text to parse
+	 * @return Array<TydNode>
+	 */
 	public static function parse(text: String): Array<TydNode> {
 		return Parse(text, 0, null, true);
 	}

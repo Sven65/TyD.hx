@@ -15,11 +15,38 @@ class TydCollectionImpl extends TydNode {
 	private var attAbstract: Bool;
 	private var attNoInherit: Bool;
 
+	/**
+	 * The amount of children in the collection
+	 */
 	public var count(get, null): Int;
+
+	/**
+	 * The children in the collection
+	 */
 	public var nodes(get, null): Array<TydNode>;
+
+	/**
+	 * @see <https://github.com/TynanSylvester/TyD#inheritance>
+	 */
 	public var attributeHandle(get, set): String;
+
+	/**
+	 * @see <https://github.com/TynanSylvester/TyD#inheritance>
+	 */
 	public var attributeSource(get, set): String;
+
+	/**
+	 * @see <https://github.com/TynanSylvester/TyD#inheritance>
+	 */
 	public var attributeAbstract(get, set): Bool;
+
+	/**
+	 * The noinherit attribute indicates that the record should not inherit anything, even if its parent does so.
+	 * Records can only inherit from other records of the same type, with the exception of null records, which can participate in inheritance with any record.
+	 *
+	 * If a string record has handle, source, or abstract attributes, an error should result.
+	 * @see <https://github.com/TynanSylvester/TyD#inheritance>
+	 */
 	public var attributeNoInherit(get, set): Bool;
 
 	public function new(name: String, parent: TydNode, docLine: Int = -1) {

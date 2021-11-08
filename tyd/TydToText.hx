@@ -12,6 +12,12 @@ import tyd.util.StringExtensions;
 using StringTools;
 
 class TydToText {
+	/**
+	 * Converts a TydNode into text
+	 * @param node The node to convert
+	 * @param indent The indent level.
+	 * @return String
+	 */
 	public static function write(node: TydNode, indent: Int = 0): String {
 		if (Std.isOfType(node, TydString)) {
 			return indentString(indent) + node.name + " " + stringContentWriteable(cast(node, TydString).value);
