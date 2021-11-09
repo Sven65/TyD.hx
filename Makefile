@@ -9,3 +9,5 @@ install:
 	haxelib install $(PACKAGE_NAME)
 submit:
 	haxelib submit $(PACKAGE_NAME)
+
+publish: clean package submit
