@@ -4,8 +4,7 @@
 	"license": "MIT",
 	"tags": ["tyd", "data", "parser"],
 	"description": "A haxe parsed for TyD - Tynan's Tidy Data Language",
-	"version": "1.0.0",
-	"classPath": "tyd/",
-	"releasenote": "Initial release, everything is working correctly.",
+	"version": "1.0.1",
+	"releasenote": "Make it actually work.",
 	"contributors": ["Mackan"]
   }
